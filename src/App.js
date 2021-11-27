@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
+import { useSelector, useDispatch } from "react-redux";
 
 import { selectCurrentUser } from "../src/redux/user/userSelector";
 
@@ -13,10 +12,16 @@ import SigninSignup from "./pages/signin-signup/SigninSignup";
 import Checkout from "./pages/checkout/Checkout";
 import { checkUserSession } from "./redux/user/user.action";
 
-const App = ({ checkUserSession, currentUser }) => {
+const App = () => {
+    // this is equivalent to mapStateToProps method in redux
+    const currentUser = useSelector(selectCurrentUser);
+
+    // this is equivalent to mapDispatchToProps method in redux dispatch
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        checkUserSession();
-    }, [checkUserSession]);
+        dispatch(checkUserSession());
+    }, [dispatch]);
 
     return (
         <div>
@@ -33,13 +38,14 @@ const App = ({ checkUserSession, currentUser }) => {
     );
 };
 
-// createStructuredSelector
-const mapStateToProps = createStructuredSelector({
-    currentUser: selectCurrentUser,
-});
+// createStructuredSelector replaces with useSelector hook
+// const mapStateToProps = createStructuredSelector({
+//     currentUser: selectCurrentUser,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-    checkUserSession: () => dispatch(checkUserSession()),
-});
+// this Method replace with useDispatch hooks
+// const mapDispatchToProps = (dispatch) => ({
+//     checkUserSession: () => dispatch(checkUserSession()),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
